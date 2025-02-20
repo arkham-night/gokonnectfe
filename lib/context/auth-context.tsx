@@ -1,9 +1,8 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import type { User, AuthResponse, LoginRequest, SignupRequest } from '../types/auth';
+import type { User, AuthResponse, LoginRequest, SignupRequest } from '../types/auth-types';
 
-// What our auth context can do
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
@@ -13,10 +12,20 @@ type AuthContextType = {
   isAuthenticated: boolean;
 };
 
-// Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// This helps us use auth in other components
+const MOCK_USER: User = {
+  id: '1',
+  email: 'test@example.com',
+  name: 'Test User',
+  role: 'user',
+  phoneNumber: '123-456-7890',
+  preferences: {
+    preferredDriverPersonality: 'chatty',
+    preferredLanguages: [{ code: 'en', name: 'English' }],
+  },
+};
+
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
@@ -25,12 +34,10 @@ export function useAuth() {
   return context;
 }
 
-// The provider that wraps our app
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if user is logged in when app starts
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const storedToken = localStorage.getItem('token');
@@ -41,23 +48,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  // Login function
   const login = async (data: LoginRequest): Promise<AuthResponse> => {
     try {
-      // TODO: Replace with your actual API call
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const result = {
+        success: true,
+        message: 'Welcome back!',
+        user: MOCK_USER,
+        token: 'test-token',
+      };
 
-      const result = await response.json();
-
-      if (result.success) {
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('user', JSON.stringify(result.user));
-        setUser(result.user);
-      }
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result.user));
+      setUser(result.user);
 
       return result;
     } catch (error) {
@@ -70,23 +74,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Signup function
   const signup = async (data: SignupRequest): Promise<AuthResponse> => {
     try {
-      // TODO: Replace with your actual API call
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const result = {
+        success: true,
+        message: 'Welcome to GoKonnect!',
+        user: MOCK_USER,
+        token: 'test-token',
+      };
 
-      const result = await response.json();
-
-      if (result.success) {
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('user', JSON.stringify(result.user));
-        setUser(result.user);
-      }
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result.user));
+      setUser(result.user);
 
       return result;
     } catch (error) {
@@ -99,14 +100,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Logout function
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
   };
 
-  // The value we'll share with our components
   const value = {
     user,
     isLoading,

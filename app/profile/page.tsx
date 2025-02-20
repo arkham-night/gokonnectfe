@@ -20,14 +20,13 @@ import {
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card";
-import type { DriverPersonality, Language } from '@/lib/types/auth';
+import type { DriverPersonality, Language } from '@/lib/types/auth-types';
 
 export default function ProfilePage() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Example languages - you can fetch these from your API
   const availableLanguages: Language[] = [
     { code: 'en', name: 'English' },
     { code: 'es', name: 'Spanish' },
@@ -43,9 +42,7 @@ export default function ProfilePage() {
     setError('');
 
     try {
-      // TODO: Implement profile update
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated delay
-      // TODO: Show success message
+      await new Promise(resolve => setTimeout(resolve, 1000));
     } catch (error) {
       setError('Failed to update profile');
     } finally {

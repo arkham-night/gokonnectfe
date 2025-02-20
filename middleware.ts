@@ -11,9 +11,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
   // Check if this page needs protection
-  const isProtectedRoute = protectedRoutes.some(route => 
-    pathname.startsWith(route)
-  );
+  const isProtectedRoute = protectedRoutes.includes(pathname);
   
   // Get the login cookie
   const authToken = request.cookies.get('authToken')?.value;
@@ -28,5 +26,5 @@ export function middleware(request: NextRequest) {
 
 // Tell Next.js which pages to check
 export const config = {
-  matcher: [...protectedRoutes, ...publicRoutes],
+  matcher: protectedRoutes.concat(publicRoutes)
 };

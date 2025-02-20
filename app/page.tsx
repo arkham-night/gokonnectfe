@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { Shield, Clock, CreditCard, ChevronRight } from "lucide-react"
+import Link from "next/link"
 
 export default function Home() {
   const benefits = [
@@ -37,8 +38,10 @@ export default function Home() {
               <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0">
                 Experience the luxury of professional chauffeur services at your fingertips. Safe, reliable, and available 24/7.
               </p>
-              <Button size="lg" className="text-lg">
-                Find a Driver <ChevronRight className="ml-2 h-5 w-5" />
+              <Button size="lg" className="text-lg" asChild>
+                <Link href="/pick-a-driver">
+                  Find a Driver <ChevronRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
             </div>
             <div className="flex-1">
